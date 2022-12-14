@@ -1,0 +1,77 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#include "Player/TCharacter.h"
+#include "Camera/CameraComponent.h"
+#include "Player/TPlayerController.h"
+#include "Components/TWeaponComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
+
+ATCharacter::ATCharacter()
+{
+	PrimaryActorTick.bCanEverTick = true;
+
+	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
+	SpringArmComponent->SetupAttachment(RootComponent);
+	SpringArmComponent->TargetArmLength = 2000.0f;
+	SpringArmComponent->bDoCollisionTest = false;
+	SpringArmComponent->SetRelativeRotation(FRotator(0.0f, -45.0f, 0.0f));
+
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera Component"));
+	CameraComponent->SetupAttachment(SpringArmComponent);
+}
+
+void ATCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	UTWeaponComponent *WeaponComp = Cast<UTWeaponComponent>(GetComponentByClass(UTWeaponComponent::StaticClass()));
+	if (WeaponComp)
+	{
+		WeaponComp->EquipWeapon(TestWeapon.Get());
+	}
+}
+
+void ATCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	TObjectPtr<ATPlayerController> playerController = Cast<ATPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	if (playerController == nullptr)
+		return;
+
+	FVector2D aimDirection = playerController->GetAimDirection();
+	SpringArmComponent->SocketOffset = FMath::Lerp(
+		SpringArmComponent->SocketOffset,
+		FVector(.0f, aimDirection.X * 400.0f, aimDirection.Y * 400.0f),
+		DeltaTime * 10.0f);
+
+	GetMesh()->SetRelativeRotation(
+		FRotator(
+			.0f,
+			FMath::RadiansToDegrees(FMath::Atan2(aimDirection.X, aimDirection.Y)),
+			.0f
+			));
+}
+
+/** Input */
+
+void ATCharacter::ForwardMovementAction_Implementation(float Value)
+{
+	AddMovementInput(FVector(100.0f, .0f, .0f), Value);
+}
+
+void ATCharacter::RightMovementAction_Implementation(float Value)
+{
+	AddMovementInput(FVector(.0f, 100.0, .0f), Value);
+}
+
+void ATCharacter::ShootAction_Implementation(bool Value)
+{
+	UE_LOG(LogTemp, Log, TEXT("SHOOT_FROMPLAYERCHAR!"));
+	UTWeaponComponent *WeaponComp = Cast<UTWeaponComponent>(GetComponentByClass(UTWeaponComponent::StaticClass()));
+	if (WeaponComp)
+	{
+		WeaponComp->Shoot(Value);
+	}
+}
