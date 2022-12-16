@@ -25,11 +25,19 @@ public:
     UPROPERTY(Category="Weapon", EditDefaultsOnly)
     float Range;
 
+    UPROPERTY(Category="Weapon", EditDefaultsOnly)
+    float RandomSpreadAngle = 0.0f;
+
+    UPROPERTY(Category="Weapon", EditDefaultsOnly)
+    int32 NumberOfBulletsInShot = 1;
+
     UPROPERTY(Category="Weapon", EditDefaultsOnly, meta = (EditCondition = "bTravellingProjectile", EditConditionHides))
     float ProjectileSpeed;
 
     UPROPERTY(Category="Weapon", EditDefaultsOnly, meta = (EditCondition = "bTravellingProjectile", EditConditionHides))
     TSubclassOf<AActor> ProjectileActor;
+
+
 
     void Shoot(class ATCharacter* character) override;
 };

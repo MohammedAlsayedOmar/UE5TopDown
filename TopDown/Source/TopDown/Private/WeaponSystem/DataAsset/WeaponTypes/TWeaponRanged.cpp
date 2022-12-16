@@ -9,31 +9,36 @@ void UTWeaponRanged::Shoot(class ATCharacter *character)
 {
     UE_LOG(LogTemp, Log, TEXT("SHOOTING RANGED"));
 
-    UTDebugComponent* TDebugComponent = character->FindComponentByClass<UTDebugComponent>();
+    UTDebugComponent *TDebugComponent = character->FindComponentByClass<UTDebugComponent>();
 
     const FVector &TraceStart = character->GetActorLocation();
-    const FVector &TraceEnd = character->GetActorLocation() + character->GetMesh()->GetForwardVector() * Range;
+    const FVector &CharacterForward = character->GetActorLocation() + character->GetMesh()->GetForwardVector() * Range;
 
-    FHitResult HitResult;
+    for (int i = 0; i < NumberOfBulletsInShot; i++)
     {
-        UWorld* World = character->GetWorld();
+        const FVector &TraceEnd = CharacterForward.RotateAngleAxis(FMath::RandRange(-RandomSpreadAngle, RandomSpreadAngle), FVector(0, 0, 1));
 
-        FCollisionQueryParams Params;
-        Params.AddIgnoredActor(character);
-
-        const bool bHit = World->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd,
-                                                          ECC_Visibility, Params);
-        if (TDebugComponent)
+        FHitResult HitResult;
         {
-            UTDebugComponent::DrawDebugLineTraceSingle(World,
-                                                       TraceStart,
-                                                       TraceEnd,
-                                                       EDrawDebugTrace::Type::ForDuration,
-                                                       bHit,
-                                                       HitResult,
-                                                       FLinearColor::Red,
-                                                       FLinearColor::Green,
-                                                       2.0f);
+            UWorld *World = character->GetWorld();
+
+            FCollisionQueryParams Params;
+            Params.AddIgnoredActor(character);
+
+            const bool bHit = World->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd,
+                                                              ECC_Visibility, Params);
+            if (TDebugComponent)
+            {
+                UTDebugComponent::DrawDebugLineTraceSingle(World,
+                                                           TraceStart,
+                                                           TraceEnd,
+                                                           EDrawDebugTrace::Type::ForDuration,
+                                                           bHit,
+                                                           HitResult,
+                                                           FLinearColor::Red,
+                                                           FLinearColor::Green,
+                                                           2.0f);
+            }
         }
     }
 }
