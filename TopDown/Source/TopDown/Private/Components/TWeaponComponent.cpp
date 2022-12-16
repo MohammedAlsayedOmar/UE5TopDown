@@ -17,7 +17,7 @@ void UTWeaponComponent::BeginPlay()
     Super::BeginPlay();
 
     OwnerCharacter = Cast<ATCharacter>(GetOwner());
-    LastShootTime = 0;
+    NextShootTime = 0;
     bIsShooting = false;
 }
 
@@ -29,11 +29,12 @@ void UTWeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
     check(World)
 
     if (
-        LastShootTime > World->GetTimeSeconds() ||
+        NextShootTime > World->GetTimeSeconds() ||
         CurrentSelectedWeapon == nullptr ||
         CurrentSelectedWeapon->WeaponType == nullptr)
     { return;}
 
+    NextShootTime = World->GetTimeSeconds() + CurrentSelectedWeapon->CooldownSeconds;
     CurrentSelectedWeapon->WeaponType->Shoot(OwnerCharacter);
 }
 

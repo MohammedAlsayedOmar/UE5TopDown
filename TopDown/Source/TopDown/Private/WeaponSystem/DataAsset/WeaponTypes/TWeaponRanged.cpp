@@ -12,7 +12,7 @@ void UTWeaponRanged::Shoot(class ATCharacter *character)
     UTDebugComponent* TDebugComponent = character->FindComponentByClass<UTDebugComponent>();
 
     const FVector &TraceStart = character->GetActorLocation();
-    const FVector &TraceEnd = character->GetActorLocation() + character->GetMesh()->GetForwardVector() * 1000.0f;
+    const FVector &TraceEnd = character->GetActorLocation() + character->GetMesh()->GetForwardVector() * Range;
 
     FHitResult HitResult;
     {

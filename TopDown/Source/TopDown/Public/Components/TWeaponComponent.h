@@ -25,7 +25,7 @@ public:
     void Shoot(bool bShooting);
 
 private:
-    float LastShootTime;
+    float NextShootTime;
     bool bIsShooting;
 
 public:	
