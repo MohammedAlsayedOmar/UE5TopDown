@@ -36,25 +36,23 @@ void ATCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	TObjectPtr<ATPlayerController> playerController = Cast<ATPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	if (playerController == nullptr)
-		return;
+}
 
-	FVector2D aimDirection = playerController->GetAimDirection();
+/** Input */
+
+void ATCharacter::LookAt_Implementation(FVector2D LookAtVector, float DeltaTime)
+{
 	SpringArmComponent->SocketOffset = FMath::Lerp(
 		SpringArmComponent->SocketOffset,
-		FVector(.0f, aimDirection.X * 400.0f, aimDirection.Y * 400.0f),
+		FVector(.0f, LookAtVector.X * 400.0f, LookAtVector.Y * 400.0f),
 		DeltaTime * 10.0f);
 
 	GetMesh()->SetRelativeRotation(
 		FRotator(
 			.0f,
-			FMath::RadiansToDegrees(FMath::Atan2(aimDirection.X, aimDirection.Y)),
-			.0f
-			));
+			FMath::RadiansToDegrees(FMath::Atan2(LookAtVector.X, LookAtVector.Y)),
+			.0f));
 }
-
-/** Input */
 
 void ATCharacter::ForwardMovementAction_Implementation(float Value)
 {

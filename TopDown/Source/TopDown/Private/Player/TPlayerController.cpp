@@ -99,16 +99,12 @@ void ATPlayerController::PlayerTick(float DeltaTime)
     float mouseY;
     if (!GetMousePosition(mouseX, mouseY)) return;
 
-    // if (FGenericPlatformMath::IsNaN(mouseX) || FGenericPlatformMath::IsNaN(mouseY)) {return; }
-
     int32 sizeX, sizeY;
     GetViewportSize(sizeX, sizeY);
     AimDirection.X = FMath::GetMappedRangeValueClamped(FVector2D(.0f, sizeX), FVector2D(-1.0f, 1.0f), mouseX);
     AimDirection.Y = FMath::GetMappedRangeValueClamped(FVector2D(.0f, sizeY), FVector2D(1.0f, -1.0f), mouseY);
 
-    // UE_LOG(LogTemp, Log, TEXT("ViewportSize: %i, %i"), sizeX, sizeY);
-    // UE_LOG(LogTemp, Log, TEXT("Mouse Location: %f, %f"), mouseX, mouseY);
-    // UE_LOG(LogTemp, Log, TEXT("AimDirection: %f, %f"), AimDirection.X, AimDirection.Y);
+    PossessedCharacter->LookAt(AimDirection, DeltaTime);
 }
 
 void ATPlayerController::ForwardMovementAction(const FInputActionValue &Value)

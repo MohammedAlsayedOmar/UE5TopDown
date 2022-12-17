@@ -31,6 +31,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "TopDown|Input")
 	void ShootAction(bool Value);
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "TopDown|Input")
+	void LookAt(FVector2D LookAtVector, float DeltaTime);
+
 protected:
 	UPROPERTY(Category = "Player", EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<class UCameraComponent> CameraComponent;
