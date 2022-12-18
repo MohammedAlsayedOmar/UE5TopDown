@@ -6,6 +6,7 @@
 #include "Components/TWeaponComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Math/Vector.h"
 
 ATCharacter::ATCharacter()
 {
@@ -35,17 +36,20 @@ void ATCharacter::BeginPlay()
 void ATCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 /** Input */
 
 void ATCharacter::LookAt_Implementation(FVector2D LookAtVector, float DeltaTime)
 {
-	SpringArmComponent->SocketOffset = FMath::Lerp(
-		SpringArmComponent->SocketOffset,
-		FVector(.0f, LookAtVector.X * 400.0f, LookAtVector.Y * 400.0f),
-		DeltaTime * 10.0f);
+	float offsetSize = 400.0f; // Should be an exposed variable but that's for tomorrow's me >_<
+	SpringArmComponent->SocketOffset = ClampVector(
+		FMath::Lerp(
+			SpringArmComponent->SocketOffset,
+			FVector(.0f, LookAtVector.X * offsetSize, LookAtVector.Y * offsetSize),
+			DeltaTime * 10.0f),
+		FVector(.0f, -offsetSize, -offsetSize),
+		FVector(.0f, offsetSize, offsetSize));
 
 	GetMesh()->SetRelativeRotation(
 		FRotator(

@@ -30,14 +30,23 @@ void UTWeaponAOE::Shoot(class ATCharacter *character)
         TArray<AActor *> outActors;
         UKismetSystemLibrary::SphereOverlapActors(World, TraceStart, Range, traceObjectTypes, seekClass, ignoreActors, outActors);
 
+        bool bHit = outActors.Num() > 0;
+
         for (AActor *overlappedActor : outActors)
         {
             UE_LOG(LogTemp, Log, TEXT("OverlappedActor: %s"), *overlappedActor->GetName());
         }
 
-        if (TDebugComponent)
+        if (TDebugComponent && TDebugComponent->GetShowTraces())
         {
-            DrawDebugSphere(World, TraceStart, Range, 12, FColor::Red, false, 2.0f);
+            UTDebugComponent::DrawDebugSphereShape(World,
+                                                   TraceStart,
+                                                   Range,
+                                                   EDrawDebugTrace::Type::ForDuration,
+                                                   bHit,
+                                                   FColor::Red,
+                                                   FColor::Green,
+                                                   2.0f);
         }
     }
 }

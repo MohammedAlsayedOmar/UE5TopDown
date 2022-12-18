@@ -52,15 +52,15 @@ public:
 	                                     float DrawTime);
 
 	static void DrawDebugCapsuleTraceSingle(const UWorld* World,
-	                                        const FVector& Start,
-	                                        const FVector& End,
-	                                        const FCollisionShape& CollisionShape,
-	                                        EDrawDebugTrace::Type DrawDebugType,
-	                                        bool bHit,
-	                                        const FHitResult& OutHit,
-	                                        FLinearColor TraceColor,
-	                                        FLinearColor TraceHitColor,
-	                                        float DrawTime);
+											const FVector& Start,
+											const FVector& End,
+											const FCollisionShape& CollisionShape,
+											EDrawDebugTrace::Type DrawDebugType,
+											bool bHit,
+											const FHitResult& OutHit,
+											FLinearColor TraceColor,
+											FLinearColor TraceHitColor,
+											float DrawTime);
 
 	static void DrawDebugSphereTraceSingle(const UWorld* World,
 	                                       const FVector& Start,
@@ -72,6 +72,15 @@ public:
 	                                       FLinearColor TraceColor,
 	                                       FLinearColor TraceHitColor,
 	                                       float DrawTime);
+
+	static void DrawDebugSphereShape(const UWorld* World,
+								const FVector& Center,
+								const float Radius,
+								EDrawDebugTrace::Type DrawDebugType,
+								bool bHit,
+								FColor TraceColor,
+								FColor TraceHitColor,
+								float DrawTime);
 
 public:
 	UPROPERTY(BlueprintReadOnly, Category = "TopDown|Debug")

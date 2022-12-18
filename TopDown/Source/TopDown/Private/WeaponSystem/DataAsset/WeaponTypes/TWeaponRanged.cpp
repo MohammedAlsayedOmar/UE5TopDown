@@ -26,8 +26,8 @@ void UTWeaponRanged::Shoot(class ATCharacter *character)
             Params.AddIgnoredActor(character);
 
             const bool bHit = World->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd,
-                                                              ECC_Visibility, Params);
-            if (TDebugComponent)
+                                                              ECC_WorldDynamic, Params);
+            if (TDebugComponent && TDebugComponent->GetShowTraces())
             {
                 UTDebugComponent::DrawDebugLineTraceSingle(World,
                                                            TraceStart,
